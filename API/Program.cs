@@ -1,6 +1,7 @@
 using System.Text;
 using API.Data;
 using API.Interfaces;
+using API.Middleware;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -36,17 +37,20 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()
 .WithOrigins("http://localhost:4200","https://localhost:4200"));
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
 
-app.UseHttpsRedirection();
+app.UseAuthentication();
+
+// app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

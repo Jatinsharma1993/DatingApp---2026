@@ -4,6 +4,7 @@ using System.Text;
 using API.Data;
 using API.DTOs;
 using API.Enitites;
+using API.Extentions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,21 +23,18 @@ public class AccountController(DataContext context , ITokenService tokenService)
         var user = new AppUser
         {
             UserName = registerDto.Username.ToLower(),
+            Email = registerDto.Email,
             PaswwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
             PasswordSalt = hmac.Key
         };
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
-        return new UserDto
-        {
-            Username = user.UserName,
-            Token = tokenService.CreateToken(user)
-        };
+        return user.ToDto(tokenService);
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+    public async Task<ActionResult<UserDto>> Login([FromBody]LoginDto loginDto)
     {
         var user = await context.Users.FirstOrDefaultAsync(x =>
         x.UserName.ToLower() == loginDto.Username.ToLower());
@@ -51,11 +49,7 @@ public class AccountController(DataContext context , ITokenService tokenService)
         {
             if (computeHash[i] != user.PaswwordHash[i]) return Unauthorized("Invalid Password");
         }
-        return new UserDto
-        {
-            Username = user.UserName,
-            Token = tokenService.CreateToken(user)
-        };
+        return user.ToDto(tokenService);
     }
 
     public async Task<bool> UserExists(string username)

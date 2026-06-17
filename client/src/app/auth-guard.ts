@@ -1,0 +1,16 @@
+import { CanActivateFn } from '@angular/router';
+import { AccountService } from '../core/services/account-service';
+import { ToastService } from '../core/services/toast-service';
+import { inject } from '@angular/core';
+
+export const authGuard: CanActivateFn = () => {
+  const accountService = inject(AccountService);
+  const toastService = inject(ToastService);
+
+  if(accountService.currentUser()) return true;
+  else{
+    toastService.error('You shall not pass');
+    return false;
+  }
+ 
+};
