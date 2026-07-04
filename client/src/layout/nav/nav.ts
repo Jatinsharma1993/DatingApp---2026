@@ -25,7 +25,7 @@ export class Nav {
          this.creds = {};
       },
       error : (error : any) => {
-        debugger
+        
         this.toastService.error(error.error)
       }
     })

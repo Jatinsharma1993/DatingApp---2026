@@ -21,9 +21,10 @@ namespace API.Data
                 Console.WriteLine("No members in seed data json");
                 return;
             }
-            using var hmac =  new HMACSHA512();
+            
             foreach(var member in members)
             {
+                using var hmac =  new HMACSHA512();
                 var user = new AppUser
                 {
                     Id = member.Id,

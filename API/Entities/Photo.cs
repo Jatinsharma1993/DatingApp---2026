@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace API.Entities
@@ -11,6 +12,7 @@ namespace API.Entities
         public required string Url { get; set; } 
         public string? PublicId { get; set; }
 
+        [JsonIgnore]
         //Navigation Property
         public Member Member { get; set; } = null!;
 

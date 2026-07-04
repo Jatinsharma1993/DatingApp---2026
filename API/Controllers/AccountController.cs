@@ -16,7 +16,7 @@ public class AccountController(DataContext context , ITokenService tokenService)
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-        if (await UserExists(registerDto.Username)) return BadRequest("Username is already taken!!");
+        if (await UserExists(registerDto.Email)) return BadRequest("Email is already taken!!");
 
         using var hmac = new HMACSHA512();
 
@@ -37,9 +37,9 @@ public class AccountController(DataContext context , ITokenService tokenService)
     public async Task<ActionResult<UserDto>> Login([FromBody]LoginDto loginDto)
     {
         var user = await context.Users.FirstOrDefaultAsync(x =>
-        x.UserName.ToLower() == loginDto.Username.ToLower());
+        x.Email.ToLower() == loginDto.Email.ToLower());
 
-        if (user == null) return Unauthorized("Invalid username");
+        if (user == null) return Unauthorized("Invalid email");
 
         using var hmac = new HMACSHA512(user.PasswordSalt);
 
