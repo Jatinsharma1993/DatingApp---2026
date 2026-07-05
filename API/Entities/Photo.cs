@@ -12,8 +12,9 @@ namespace API.Entities
         public required string Url { get; set; } 
         public string? PublicId { get; set; }
 
-        [JsonIgnore]
+        
         //Navigation Property
+        [JsonIgnore]
         public Member Member { get; set; } = null!;
 
         public string MemberId { get; set; } = null!;

@@ -10,8 +10,10 @@ public static class AppUserExtensions
     {
         return new UserDto
         {
+            Id = user.Id,
             Username = user.UserName,
             Email = user.Email,
+            ImageUrl = user.ImageUrl,
             Token = tokenService.CreateToken(user)
         };
     }
