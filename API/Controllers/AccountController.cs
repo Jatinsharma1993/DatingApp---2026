@@ -52,8 +52,8 @@ public class AccountController(DataContext context , ITokenService tokenService)
         return user.ToDto(tokenService);
     }
 
-    public async Task<bool> UserExists(string username)
+    public async Task<bool> UserExists(string email)
     {
-        return await context.Users.AnyAsync(x => x.UserName.ToLower() == username.ToLower());
+        return await context.Users.AnyAsync(x => x.Email.ToLower() == email.ToLower());
     }
 }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +8,14 @@ namespace API.Data
     {
         public async Task<Member?> GetMemberByIdAsync(string id)
         {
-            return await context.Members.FindAsync(id);
+            return await context.Members.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Member?> GetMemberForUpdate(string id)
+        {
+            return await context.Members
+            .Include(x => x.User)
+            .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IReadOnlyList<Member>> GetMembersAsync()
