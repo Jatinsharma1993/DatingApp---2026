@@ -4,6 +4,7 @@ using System.Text;
 using API.Data;
 using API.DTOs;
 using API.Enitites;
+using API.Entities;
 using API.Extentions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,15 @@ public class AccountController(DataContext context , ITokenService tokenService)
             UserName = registerDto.Username.ToLower(),
             Email = registerDto.Email,
             PaswwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-            PasswordSalt = hmac.Key
+            PasswordSalt = hmac.Key,
+            Member = new Member
+            {
+                UserName = registerDto.Username,
+                Gender = registerDto.Gender,
+                City = registerDto.City,
+                Country = registerDto.Country,
+                DateOfBirth = registerDto.DateOfBirth
+            }
         };
 
         context.Users.Add(user);
